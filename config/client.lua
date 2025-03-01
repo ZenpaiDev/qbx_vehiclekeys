@@ -73,6 +73,21 @@ return {
             vehicles = {
                 [`police`] = true,  -- Vehicle model
                 [`police2`] = true, -- Vehicle model
+                ['baller8um'] = true,
+                ['Castigatorum'] = true,
+                ['Envisageum'] = true,
+                ['Vorschlaghammerum'] = true,
+                ['jcon'] = true,
+                ['pbbejv'] = true,
+                ['pdpantoj'] = true,
+                ['pksrsjv'] = true,
+                ['pvccjv'] = true,
+                ['pvcjv'] = true,
+                ['pvsjv'] = true,
+                ['pvtjv'] = true,
+                ['spbbjv'] = true,
+                ['spbgjv'] = true,
+                ['spvhjv'] = true
             }
         },
         ambulance = {
@@ -81,6 +96,15 @@ return {
             classes = {},
             vehicles = {
                 [`ambulance`] = true,
+                ['emsaleutian'] = true,
+                ['emsbuffalo4'] = true,
+                ['emsbuffalos'] = true,
+                ['emscara'] = true,
+                ['emsgranger'] = true,
+                ['emsomnisegt'] = true,
+                ['emstor'] = true,
+                ['sebbjv'] = true,
+                ['evajv'] = true
             },
         },
         mechanic = {

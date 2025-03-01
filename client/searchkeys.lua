@@ -27,7 +27,7 @@ local function findKeys(vehicleModel, vehicleClass, vehicle)
         or config.anims.searchKeys.model[vehicleClass]
         or config.anims.searchKeys.default
 
-    local searchingForKeys = true
+    local searchingForKeys = false
     CreateThread(function()
         while searchingForKeys do
             if not IsEntityPlayingAnim(cache.ped, anim.dict, anim.clip, 49) then
@@ -36,7 +36,7 @@ local function findKeys(vehicleModel, vehicleClass, vehicle)
             Wait(100)
         end
     end)
-    if lib.progressCircle({
+    if lib.progressBar({
         duration = hotwireTime,
         label = locale('progress.searching_keys'),
         position = 'bottom',

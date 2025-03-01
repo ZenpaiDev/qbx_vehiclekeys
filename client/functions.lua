@@ -175,13 +175,6 @@ function LockpickDoor(isAdvancedLockedpick, maxDistance, customChallenge)
         or GetVehicleConfig(vehicle).lockpickImmune
     then return end
 
-    local skillCheckConfig = config.skillCheck[isAdvancedLockedpick and 'advancedLockpick' or 'lockpick']
-
-    skillCheckConfig = skillCheckConfig.model[GetEntityModel(vehicle)]
-        or skillCheckConfig.class[GetVehicleClass(vehicle)]
-        or skillCheckConfig.default
-    if not next(skillCheckConfig) then return end
-
     if islockpickingProcessLocked then return end -- start of the critical section
     islockpickingProcessLocked = true -- one call per player at a time
 
@@ -190,7 +183,12 @@ function LockpickDoor(isAdvancedLockedpick, maxDistance, customChallenge)
             or config.anims.lockpick.class[GetVehicleClass(vehicle)]
             or config.anims.lockpick.default
         lib.playAnim(cache.ped, anim.dict, anim.clip, 3.0, 3.0, -1, 16, 0, false, false, false) -- lock opening animation
-        local isSuccess = customChallenge or lib.skillCheck(skillCheckConfig.difficulty, skillCheckConfig.inputs)
+
+    -- Custom minigame: bl_ui:CircleShake
+        local iterations = 3 -- Number of iterations (default: 1)
+        local difficulty = 75 -- Difficulty level (1-100, default: 50)
+        local numberOfStages = 4 -- Number of stages (default: 3)
+        local isSuccess = bl_ui:CircleShake(iterations, difficulty, numberOfStages)
 
         if getIsVehicleInRange(vehicle, maxDistance) then -- the action will be aborted if the opened vehicle is too far.
             lockpickCallback(vehicle, isAdvancedLockedpick, isSuccess)
@@ -244,8 +242,13 @@ function Hotwire(vehicle, isAdvancedLockedpick, customChallenge)
         local anim = config.anims.hotwire.model[GetEntityModel(vehicle)]
         or config.anims.hotwire.class[GetVehicleClass(vehicle)]
         or config.anims.hotwire.default
-        lib.playAnim(cache.ped, anim.dict, anim.clip, 3.0, 3.0, -1, 16, 0, false, false, false) -- lock opening animation
-        local isSuccess = customChallenge or lib.skillCheck(skillCheckConfig.difficulty, skillCheckConfig.inputs)
+        lib.playAnim(cache.ped, anim.dict, anim.clip, 3.0, 3.0, -1, 16, 0, false, false, false) -- hotwiring animation
+
+    -- Custom minigame: bl_ui:NumberSlide
+        local iterations = 3 -- Number of iterations (default: 1)
+        local difficulty = 75 -- Difficulty level (1-100, default: 50)
+        local numberOfKeys = 4 -- Number of keys (default: 3)
+        local isSuccess = customChallenge or bl_ui:NumberSlide(iterations, difficulty, numberOfKeys)
 
         hotwireCallback(vehicle, isAdvancedLockedpick, isSuccess)
 

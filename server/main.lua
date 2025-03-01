@@ -41,9 +41,9 @@ RegisterNetEvent('qbx_vehiclekeys:server:tookKeys', function(netId)
 end)
 
 ---TODO: secure this event
-RegisterNetEvent('qbx_vehiclekeys:server:hotwiredVehicle', function(netId)
-    GiveKeys(source, NetworkGetEntityFromNetworkId(netId))
-end)
+-- RegisterNetEvent('qbx_vehiclekeys:server:hotwiredVehicle', function(netId)
+--     GiveKeys(source, NetworkGetEntityFromNetworkId(netId))
+-- end)
 
 RegisterNetEvent('qb-vehiclekeys:server:breakLockpick', function(itemName)
     if not (itemName == 'lockpick' or itemName == 'advancedlockpick') then return end

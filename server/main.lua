@@ -32,7 +32,7 @@ RegisterNetEvent('qbx_vehiclekeys:server:playerEnteredVehicleWithEngineOn', func
     local src = source
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     if not GetIsVehicleEngineRunning(vehicle) then return end
-    GiveKeys(src, vehicle)
+    -- GiveKeys(src, vehicle) // COMMENTED OUT DONT WANT KEYS GIVEN IF PLAYERS GETS INSIDE RUNNING VEHICLE.
 end)
 
 ---TODO: secure this event

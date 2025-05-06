@@ -18,7 +18,7 @@ return {
             shared = false,
             removeNormalLockpickChance = 0.4,
             removeAdvancedLockpickChance = 0.2,
-            findKeysChance = 0.5,
+            findKeysChance = 0.0, -- SET TO 0.0 TO DISABLE FEATURE
         },
         ---@type table<VehicleClass, VehicleConfig>
         classes = {

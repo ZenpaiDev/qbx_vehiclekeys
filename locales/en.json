@@ -23,6 +23,8 @@
         "engine": "Toggle Engine",
         "search_keys_dispatch": "[H] - Search for Keys",
         "search_keys": "Search for vehicle keys",
+        "hotwire_dispatch": "[H] - Search for Keys",
+        "hotwire_keys": "Hotwire vehicle",
         "toggle_locks": "Toggle Vehicle Locks",
         "vehicle_theft": "Vehicle theft in progress. Type: "
     },

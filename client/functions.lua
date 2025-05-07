@@ -213,35 +213,25 @@ end
 
 ---Operations done after the LockpickDoor quickevent done.
 ---@param vehicle number The entity number of the vehicle.
----@param isAdvancedLockedpick boolean Determines whether an advanced lockpick was used.
 ---@param isSuccess boolean? Determines whether the lock has been successfully opened.
-local function hotwireCallback(vehicle, isAdvancedLockedpick, isSuccess)
+local function hotwireCallback(vehicle, isSuccess)
     if isSuccess then
         hotwireSuccessCallback(vehicle)
     else -- if player fails quickevent
         SendPoliceAlertAttempt('carjack', vehicle)
         TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
-        exports.qbx_core:Notify(locale('notify.failed_lockedpick'), 'error')
+        exports.qbx_core:Notify(locale('notify.failed_hotwire'), 'error')
     end
-
-    breakLockpick(isAdvancedLockedpick, vehicle)
 end
 
 local isHotwiringProcessLocked = false -- lock flag
 ---Hotwiring with a tool quickevent.
 ---@param vehicle number The entity number of the vehicle.
----@param isAdvancedLockedpick boolean Determines whether an advanced lockpick was used
 ---@param customChallenge boolean? lockpick challenge
-function Hotwire(vehicle, isAdvancedLockedpick, customChallenge)
-    if cache.seat ~= -1 or GetIsVehicleAccessible(vehicle) then return end
-    local skillCheckConfig = config.skillCheck[isAdvancedLockedpick and 'advancedHotwire' or 'hotwire']
-
-    skillCheckConfig = skillCheckConfig.model[GetEntityModel(vehicle)]
-        or skillCheckConfig.class[GetVehicleClass(vehicle)]
-        or skillCheckConfig.default
-    if not next(skillCheckConfig) then return end
-
-    if isHotwiringProcessLocked then return end -- start of the critical section
+function Hotwire(vehicle, customChallenge)
+    if not isHotwiringProcessLocked and cache.seat == -1 and not GetIsVehicleAccessible(vehicle) then
+        lib.showTextUI('[H] - Hotwire', { position = "left-center" })
+    end
     isHotwiringProcessLocked = true -- one call per player at a time
 
     CreateThread(function()
@@ -254,7 +244,7 @@ function Hotwire(vehicle, isAdvancedLockedpick, customChallenge)
         local difficulty = math.random(75, 85)
         local isSuccess = customChallenge or exports.bl_ui:CircleProgress(iterations, difficulty)
 
-        hotwireCallback(vehicle, isAdvancedLockedpick, isSuccess)
+        hotwireCallback(vehicle, isSuccess)
 
         Wait(config.hotwireCooldown)
         isHotwiringProcessLocked = false -- end of the critical section

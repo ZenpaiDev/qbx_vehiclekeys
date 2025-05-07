@@ -83,7 +83,7 @@ lib.addCommand(locale('addcom.addkeys'), {
             optional = true,
         },
     },
-    restricted = 'group.admin',
+    restricted = 'group.cdirector',
 }, function (source, args)
     local playerId = args[locale('addcom.addkeys_id')]
     transferKeys(source, playerId, false)

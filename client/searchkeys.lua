@@ -63,7 +63,7 @@ end
 local searchKeysKeybind = lib.addKeybind({
     name = 'searchkeys',
     description = locale('info.search_keys'),
-    defaultKey = 'H',
+    defaultKey = '',
     secondaryMapper = 'PAD_DIGITALBUTTONANY',
     secondaryKey = 'LRIGHT_INDEX',
     disabled = true,

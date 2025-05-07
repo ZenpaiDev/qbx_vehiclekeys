@@ -205,10 +205,6 @@ function LockpickDoor(isAdvancedLockedpick, maxDistance, customChallenge)
     end)
 end
 
------------------------------------------------------
---- HOTWIRE LOGIC
------------------------------------------------------
-
 ---Will be executed when the lock opening is successful.
 ---@param vehicle number The entity number of the vehicle.
 local function hotwireSuccessCallback(vehicle)
@@ -228,35 +224,14 @@ local function hotwireCallback(vehicle, isSuccess)
     end
 end
 
-local isHotwireAllowed = false
-
-local function setHotwireLabelState(isAllowed)
-    if isHotwiringProcessLocked and isAllowed then return end
-
-    local isOpen, text = lib.isTextUIOpen()
-    local newText = '[H] - Hotwire'
-    local isValidMessage = text and text == newText
-    local canHotwire = isAllowed
-        and cache.seat == -1
-        and cache.vehicle
-        and not GetIsVehicleAccessible(cache.vehicle)
-
-    if canHotwire and not isValidMessage then
-        lib.showTextUI(newText)
-    elseif (not canHotwire) and isOpen and isValidMessage then
-        lib.hideTextUI()
-    end
-
-    isHotwireAllowed = canHotwire
-end
-
 local isHotwiringProcessLocked = false -- lock flag
 ---Hotwiring with a tool quickevent.
 ---@param vehicle number The entity number of the vehicle.
 ---@param customChallenge boolean? lockpick challenge
 function Hotwire(vehicle, customChallenge)
-    if cache.seat ~= -1 or GetIsVehicleAccessible(vehicle) then return end
-    if isHotwiringProcessLocked then return end -- start of the critical section
+    if not isHotwiringProcessLocked and cache.seat == -1 and not GetIsVehicleAccessible(vehicle) then
+        lib.showTextUI('[H] - Hotwire', { position = "left-center" })
+    end
     isHotwiringProcessLocked = true -- one call per player at a time
 
     CreateThread(function()
@@ -274,44 +249,4 @@ function Hotwire(vehicle, customChallenge)
         Wait(config.hotwireCooldown)
         isHotwiringProcessLocked = false -- end of the critical section
     end)
-end
-
-CreateThread(function()
-    local wasInVehicle = false
-    while true do
-        Wait(500)
-
-        local inVehicle = cache.vehicle and cache.seat == -1 and not GetIsVehicleAccessible(cache.vehicle)
-
-        if inVehicle and not wasInVehicle then
-            EnableHotwire()
-            wasInVehicle = true
-        elseif not inVehicle and wasInVehicle then
-            DisableHotwire()
-            wasInVehicle = false
-        end
-    end
-end)
-
-local hotwireKeybind = lib.addKeybind({
-    name = 'hotwire',
-    description = locale('info.hotwire_keys'),
-    defaultKey = 'H',
-    disabled = true,
-    onPressed = function()
-        if isHotwireAllowed and cache.vehicle then
-            lib.hideTextUI()
-            Hotwire(cache.vehicle)
-        end
-    end
-})
-
-function EnableHotwire()
-    setHotwireLabelState(true)
-    hotwireKeybind:disable(false)
-end
-
-function DisableHotwire()
-    setHotwireLabelState(false)
-    hotwireKeybind:disable(true)
 end

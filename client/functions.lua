@@ -232,18 +232,20 @@ local isHotwireAllowed = false
 
 local function setHotwireLabelState(isAllowed)
     if isHotwiringLocked and isAllowed then return end
-    local isOpen, text = lib.isTextUIOpen()
-    local newText = '[H] - Hotwire'
-    local isValidMessage = text and text == newText
 
+    local newText = '[H] - Hotwire'
+    local isValidMessage = false  -- For `jg-textui`, no need to check the current text
+
+    -- Show the text UI with jg-textui
     if isAllowed and not isValidMessage and cache.seat == -1 and cache.vehicle and not GetIsVehicleAccessible(cache.vehicle) then
-        lib.showTextUI(newText)
-    elseif (not isAllowed or cache.seat ~= -1 or not cache.vehicle or GetIsVehicleAccessible(cache.vehicle)) and isOpen and isValidMessage then
-        lib.hideTextUI()
+        exports['jg-textui']:DrawText(newText)
+    elseif (not isAllowed or cache.seat ~= -1 or not cache.vehicle or GetIsVehicleAccessible(cache.vehicle)) then
+        exports['jg-textui']:HideText()
     end
 
     isHotwireAllowed = isAllowed and cache.seat == -1
 end
+
 
 local isHotwiringProcessLocked = false -- lock flag
 ---Hotwiring with a tool quickevent.
@@ -290,12 +292,11 @@ end)
 
 local hotwireKeybind = lib.addKeybind({
     name = 'hotwire',
-    description = locale('info.hotwire_keys'),
+    description = locale('info.hotwire'),
     defaultKey = 'H',
     disabled = true,
     onPressed = function()
         if isHotwireAllowed and cache.vehicle then
-            lib.hideTextUI()
             Hotwire(cache.vehicle)
         end
     end

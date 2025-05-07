@@ -49,7 +49,17 @@ return {
     ---@param crime string
     ---@param vehicle number entity
     alertPolice = function(crime, vehicle)
-        TriggerServerEvent('police:server:policeAlert', locale("info.vehicle_theft") .. crime)
+        local coords = GetEntityCoords(vehicle)
+        TriggerServerEvent('Shop:lb-tablet:Dispatch', {
+            priority = 'medium',
+            code = '10-16',
+            title = 'Vehicle Theft',
+            description = 'An anonymous caller has reported a possible vehicle theft ',
+            location = { label = crime, coords = { x = coords.x, y = coords.y } },
+            time = 100,
+            blip = { sprite = 488, color = 1, size = 1.0, shortRange = false, label = 'Stolen Vehicle'},
+            job = 'police',
+        })
     end,
 
     vehicleAlarmDuration = 10000,
